@@ -1,0 +1,51 @@
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### OS ###
+.DS_Store
+Thumbs.db
+*.env
+.env
+
+### Spring Boot profile configs with environment-specific credentials ###
+### Commit application.properties (base config) only                  ###
+src/main/resources/application-dev.properties
+src/main/resources/application-stg.properties
+src/main/resources/application-prod.properties
+
+### Claude / AI tool session files — internal context and design notes ###
+claude/
+.claude/
+.agents/
+skills-lock.json
