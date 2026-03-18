@@ -241,36 +241,36 @@ and excecution of them results in the following output:
 
 This project was built incrementally across 7 tasks, each introducing a new layer of a production-grade Spring Boot application. The table below summarizes every feature implemented, the technology used, and the key concept it demonstrates.
 
-| # | Task | Feature | Technology / Tool | Key Concept |
-|---|------|---------|-------------------|-------------|
-| 1 | Hello World | Application bootstrap | Spring Boot 4.0.3 | Auto-configuration, embedded Tomcat |
-| 1 | Hello World | Startup hook | `CommandLineRunner` | Lifecycle callbacks |
-| 2 | CRUD API | REST endpoints | `@RestController`, `@RequestMapping` | HTTP verbs, path variables, request body |
-| 2 | CRUD API | Data persistence | Spring Data JPA + Hibernate 7 | ORM, `JpaRepository`, `@Entity` |
-| 2 | CRUD API | In-memory database | H2 | Rapid prototyping without external DB |
-| 2 | CRUD API | Boilerplate reduction | Lombok (`@Builder`, `@Getter`, `@Setter`) | Code generation at compile time |
-| 3 | Security | Authentication endpoint | `AuthController` + `AuthenticationManager` | Credential validation, token issuance |
-| 3 | Security | Stateless JWT auth | jjwt 0.12.6 + `JwtService` | Token generation, signing (HS256), claims |
-| 3 | Security | Request filtering | `JwtAuthFilter` (`OncePerRequestFilter`) | Extracting auth from `Authorization` header |
-| 3 | Security | Role-based access | `SecurityConfig` + `@EnableMethodSecurity` | `ROLE_USER` vs `ROLE_ADMIN` route rules |
-| 3 | Security | Stateless sessions | `SessionCreationPolicy.STATELESS` | No server-side session (pure Bearer token) |
-| 4 | Config | Multi-environment support | Spring Profiles | `application-{dev,stg,prod}.properties` |
-| 4 | Config | Externalized secrets | `${ENV_VAR:default}` placeholders | Twelve-Factor App principle |
-| 5 | Migration | Schema management | Flyway (`spring-boot-starter-flyway`) | Versioned migrations, reproducible DB state |
-| 5 | Migration | Seed data | `V2__add_sample_data.sql` | Test data present on every startup |
-| 5 | Migration | DDL ownership | `spring.jpa.hibernate.ddl-auto=none` | Flyway owns DDL; Hibernate never touches it |
-| 6 | Observability | Application health | `CustomEventHealthIndicator` | Custom `HealthIndicator` for business logic |
-| 6 | Observability | Metrics exposition | Spring Actuator + Micrometer | `/actuator/prometheus` scrape endpoint |
-| 6 | Observability | Business counters | `Counter` (events created, deleted, logins) | Tracking domain events as time-series |
-| 6 | Observability | Live gauge | `Gauge` (`events_total_in_db`) | Real-time DB count polled on each scrape |
-| 6 | Observability | Latency measurement | `Timer` (`events_service_duration_seconds`) | p95/p99 service method latency |
-| 6 | Observability | Tagged counters | `events_by_type_total{type}` | Label cardinality in Prometheus |
-| 6 | Observability | Prometheus integration | Docker + `prometheus.yml` | Scrape configuration, `host.docker.internal` |
-| 7 | Testing | Repository tests | `@SpringBootTest` + `@Transactional` | Rollback isolation, JPA slice (Boot 4.x) |
-| 7 | Testing | Service unit tests | Mockito (`@ExtendWith(MockitoExtension.class)`) | Mocking dependencies, verifying interactions |
-| 7 | Testing | Controller tests | `@SpringBootTest` + `MockMvcBuilders` | Web layer isolation, `@WithMockUser` for roles |
-| 7 | Testing | Integration tests | `@SpringBootTest` + real JWT | End-to-end: auth → controller → service → DB |
-| 7 | Testing | Security testing | `spring-security-test`, `.apply(springSecurity())` | Filter chain in MockMvc, Bearer token flow |
+| # | Task | Feature | Technology / Tool | Key Concept                                          |
+|---|------|---------|-------------------|------------------------------------------------------|
+| 1 | Hello World | Application bootstrap | Spring Boot 4.0.3 | Auto-configuration, embedded Tomcat                  |
+| 1 | Hello World | Startup hook | `CommandLineRunner` | Lifecycle callbacks                                  |
+| 2 | CRUD API | REST endpoints | `@RestController`, `@RequestMapping` | HTTP verbs, path variables, request body             |
+| 2 | CRUD API | Data persistence | Spring Data JPA + Hibernate 7 | ORM, `JpaRepository`, `@Entity`                      |
+| 2 | CRUD API | In-memory database | H2 | Rapid prototyping without external DB                |
+| 2 | CRUD API | Boilerplate reduction | Lombok (`@Builder`, `@Getter`, `@Setter`) | Code generation at compile time                      |
+| 3 | Security | Authentication endpoint | `AuthController` + `AuthenticationManager` | Credential validation, token issuance                |
+| 3 | Security | Stateless JWT auth | jjwt 0.12.6 + `JwtService` | Token generation, signing (HS256), claims            |
+| 3 | Security | Request filtering | `JwtAuthFilter` (`OncePerRequestFilter`) | Extracting auth from `Authorization` header          |
+| 3 | Security | Role-based access | `SecurityConfig` + `@EnableMethodSecurity` | `ROLE_USER` vs `ROLE_ADMIN` route rules              |
+| 3 | Security | Stateless sessions | `SessionCreationPolicy.STATELESS` | No server-side session (pure Bearer token)           |
+| 4 | Config | Multi-environment support | Spring Profiles | `application-{dev,stg,prod}.properties`              |
+| 4 | Config | Externalized secrets | `${ENV_VAR:default}` placeholders | Twelve-Factor App principle [12 factor principles](https://www.youtube.com/watch?v=NZ9mPvDGph0) |
+| 5 | Migration | Schema management | Flyway (`spring-boot-starter-flyway`) | Versioned migrations, reproducible DB state          |
+| 5 | Migration | Seed data | `V2__add_sample_data.sql` | Test data present on every startup                   |
+| 5 | Migration | DDL ownership | `spring.jpa.hibernate.ddl-auto=none` | Flyway owns DDL; Hibernate never touches it          |
+| 6 | Observability | Application health | `CustomEventHealthIndicator` | Custom `HealthIndicator` for business logic          |
+| 6 | Observability | Metrics exposition | Spring Actuator + Micrometer | `/actuator/prometheus` scrape endpoint               |
+| 6 | Observability | Business counters | `Counter` (events created, deleted, logins) | Tracking domain events as time-series                |
+| 6 | Observability | Live gauge | `Gauge` (`events_total_in_db`) | Real-time DB count polled on each scrape             |
+| 6 | Observability | Latency measurement | `Timer` (`events_service_duration_seconds`) | p95/p99 service method latency                       |
+| 6 | Observability | Tagged counters | `events_by_type_total{type}` | Label cardinality in Prometheus                      |
+| 6 | Observability | Prometheus integration | Docker + `prometheus.yml` | Scrape configuration, `host.docker.internal`         |
+| 7 | Testing | Repository tests | `@SpringBootTest` + `@Transactional` | Rollback isolation, JPA slice (Boot 4.x)             |
+| 7 | Testing | Service unit tests | Mockito (`@ExtendWith(MockitoExtension.class)`) | Mocking dependencies, verifying interactions         |
+| 7 | Testing | Controller tests | `@SpringBootTest` + `MockMvcBuilders` | Web layer isolation, `@WithMockUser` for roles       |
+| 7 | Testing | Integration tests | `@SpringBootTest` + real JWT | End-to-end: auth → controller → service → DB         |
+| 7 | Testing | Security testing | `spring-security-test`, `.apply(springSecurity())` | Filter chain in MockMvc, Bearer token flow           |
 
 ### Notable Spring Boot 4.x Discoveries
 
