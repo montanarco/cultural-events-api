@@ -211,3 +211,90 @@ when the container is started it connects to the actuator metrics and is show up
 ![Prometheus target UP.png](assets/Prometheus%20target%20UP.png)
 
 Note: a detailed report of the diferent insight that we obtained using the actuator is available at: [claude/prometheus-metrics.md](claude/prometheus-metrics.md) and a demo of how to use the actuator endpoints is available at: [claude/prometheus-monitoring.md](claude/prometheus-monitoring.md)
+
+## Task 7 - CRUD application: testing
+
+**Cost: 20 points.**
+
+In memory db must be used for testing purpose
+Implement repository testing
+Implement unit tests
+Implement tests for RestController using mock mvc
+Implement integration tests
+
+test were created according to the instruction above, the location of the is "src/test/java/com/epam/java_learning_epam"
+
+to run the tests you can use the following command:
+```bash
+JAVA_HOME=/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home ./mvnw test
+```
+These test were generated using claude code but still we review them and make sure those are meaningful and relevant to certify the functions do what them are mean to do.
+claude used the springframework testing library.
+
+and excecution of them results in the following output:
+
+![Test execution doing right.png](assets/Test%20execution%20doing%20right.png)
+
+---
+
+## Conclusion
+
+This project was built incrementally across 7 tasks, each introducing a new layer of a production-grade Spring Boot application. The table below summarizes every feature implemented, the technology used, and the key concept it demonstrates.
+
+| # | Task | Feature | Technology / Tool | Key Concept |
+|---|------|---------|-------------------|-------------|
+| 1 | Hello World | Application bootstrap | Spring Boot 4.0.3 | Auto-configuration, embedded Tomcat |
+| 1 | Hello World | Startup hook | `CommandLineRunner` | Lifecycle callbacks |
+| 2 | CRUD API | REST endpoints | `@RestController`, `@RequestMapping` | HTTP verbs, path variables, request body |
+| 2 | CRUD API | Data persistence | Spring Data JPA + Hibernate 7 | ORM, `JpaRepository`, `@Entity` |
+| 2 | CRUD API | In-memory database | H2 | Rapid prototyping without external DB |
+| 2 | CRUD API | Boilerplate reduction | Lombok (`@Builder`, `@Getter`, `@Setter`) | Code generation at compile time |
+| 3 | Security | Authentication endpoint | `AuthController` + `AuthenticationManager` | Credential validation, token issuance |
+| 3 | Security | Stateless JWT auth | jjwt 0.12.6 + `JwtService` | Token generation, signing (HS256), claims |
+| 3 | Security | Request filtering | `JwtAuthFilter` (`OncePerRequestFilter`) | Extracting auth from `Authorization` header |
+| 3 | Security | Role-based access | `SecurityConfig` + `@EnableMethodSecurity` | `ROLE_USER` vs `ROLE_ADMIN` route rules |
+| 3 | Security | Stateless sessions | `SessionCreationPolicy.STATELESS` | No server-side session (pure Bearer token) |
+| 4 | Config | Multi-environment support | Spring Profiles | `application-{dev,stg,prod}.properties` |
+| 4 | Config | Externalized secrets | `${ENV_VAR:default}` placeholders | Twelve-Factor App principle |
+| 5 | Migration | Schema management | Flyway (`spring-boot-starter-flyway`) | Versioned migrations, reproducible DB state |
+| 5 | Migration | Seed data | `V2__add_sample_data.sql` | Test data present on every startup |
+| 5 | Migration | DDL ownership | `spring.jpa.hibernate.ddl-auto=none` | Flyway owns DDL; Hibernate never touches it |
+| 6 | Observability | Application health | `CustomEventHealthIndicator` | Custom `HealthIndicator` for business logic |
+| 6 | Observability | Metrics exposition | Spring Actuator + Micrometer | `/actuator/prometheus` scrape endpoint |
+| 6 | Observability | Business counters | `Counter` (events created, deleted, logins) | Tracking domain events as time-series |
+| 6 | Observability | Live gauge | `Gauge` (`events_total_in_db`) | Real-time DB count polled on each scrape |
+| 6 | Observability | Latency measurement | `Timer` (`events_service_duration_seconds`) | p95/p99 service method latency |
+| 6 | Observability | Tagged counters | `events_by_type_total{type}` | Label cardinality in Prometheus |
+| 6 | Observability | Prometheus integration | Docker + `prometheus.yml` | Scrape configuration, `host.docker.internal` |
+| 7 | Testing | Repository tests | `@SpringBootTest` + `@Transactional` | Rollback isolation, JPA slice (Boot 4.x) |
+| 7 | Testing | Service unit tests | Mockito (`@ExtendWith(MockitoExtension.class)`) | Mocking dependencies, verifying interactions |
+| 7 | Testing | Controller tests | `@SpringBootTest` + `MockMvcBuilders` | Web layer isolation, `@WithMockUser` for roles |
+| 7 | Testing | Integration tests | `@SpringBootTest` + real JWT | End-to-end: auth → controller → service → DB |
+| 7 | Testing | Security testing | `spring-security-test`, `.apply(springSecurity())` | Filter chain in MockMvc, Bearer token flow |
+
+### Notable Spring Boot 4.x Discoveries
+
+Working with Spring Boot 4.0.3 (Spring Framework 7.x) surfaced several breaking changes from 3.x that are worth documenting:
+
+| Area | Spring Boot 3.x | Spring Boot 4.x |
+|------|----------------|----------------|
+| Test slices | `@WebMvcTest`, `@DataJpaTest` available | **Removed** — use `@SpringBootTest` + `MockMvcBuilders` |
+| `@AutoConfigureMockMvc` | Auto-wires `MockMvc` into the test | **Removed** — set up `MockMvc` manually |
+| `@MockBean` | `org.springframework.boot.test.mock.mockito` | Replaced by `@MockitoBean` (`org.springframework.test.context.bean.override.mockito`) |
+| `HealthIndicator` package | `org.springframework.boot.actuate.health` | Moved to `org.springframework.boot.health.contributor` |
+| Flyway dependency | `flyway-core` alone sufficient | Requires `spring-boot-starter-flyway` |
+| `ObjectMapper` as bean | Auto-configured, injectable via `@Autowired` | Not exposed as a bean — instantiate with `new ObjectMapper()` |
+
+### Final Metrics
+
+| Metric | Value |
+|--------|-------|
+| Tasks completed | 7 of 7 |
+| Source files | 14 Java classes |
+| Test classes | 4 |
+| Total tests | 42 (all passing) |
+| API endpoints | 7 (1 auth + 5 CRUD + 1 hello) |
+| Custom Prometheus metrics | 6 |
+| Flyway migrations | 2 (V1 schema, V2 seed data) |
+| Spring Boot version | 4.0.3 |
+| Java version | 21 |
